@@ -97,27 +97,19 @@ export async function POST(req: NextRequest) {
   let data = ''
 
   try {
-  const result = await whisper({
-    mode: options.endpoint,
-    file: fs.createReadStream(filepath),
-    response_format: 'vtt',
-    temperature: options.temperature,
-    language: options.language,
-  });
+    const result = await whisper({
+      mode: options.endpoint,
+      file: fs.createReadStream(filepath),
+      response_format: 'vtt',
+      temperature: options.temperature,
+      language: options.language,
+    })
 
-  // 🧠 Safely extract text result
-  if (typeof result === 'string') {
-    data = result;
-  } else if ('text' in result) {
-    data = result.text;
-  } else if ('data' in result) {
-    data = result.data;
-  } else {
-    data = JSON.stringify(result);
-  }
-
-  console.log(options.endpoint, data);
-} catch (error: any) {
-  console.error(error.name, error.message);
-  throw error;
-}
+    if (typeof result === 'string') {
+      data = result
+    } else if ('text' in result) {
+      data = result.text
+    } else if ('data' in result) {
+      data = result.data
+    } else {
+      data = JSON.stringify
