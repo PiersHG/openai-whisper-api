@@ -2,8 +2,8 @@ import fs from 'fs'
 import path from 'path'
 import { exec } from 'child_process'
 import { NextRequest, NextResponse } from 'next/server'
-import { cleanInput } from '@/lib/utils'
-import { whisper } from '@/services/openai'
+import { cleanInput } from '../../lib/utils'
+import { whisper } from '../../services/openai'
 
 export async function POST(req: NextRequest) {
   const form = await req.formData()
