@@ -1,10 +1,22 @@
 import OpenAI from 'openai'
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_APIKEY,
-    maxRetries: 4,
-    timeout: 60 * 1000 // 60s
-})
+let openai: OpenAI | null = null
+
+function getOpenAI() {
+  if (!openai) {
+    if (!process.env.OPENAI_APIKEY) {
+      throw new Error('OPENAI_APIKEY is not defined in environment')
+    }
+
+    openai = new OpenAI({
+      apiKey: process.env.OPENAI_APIKEY,
+      maxRetries: 4,
+      timeout: 60 * 1000,
+    })
+  }
+
+  return openai
+}
 
 export async function whisper({
     mode = 'transcriptions',
