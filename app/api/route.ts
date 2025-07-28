@@ -112,4 +112,18 @@ export async function POST(req: NextRequest) {
     } else if ('data' in result) {
       data = result.data
     } else {
-      data = JSON.stringify
+      data = JSON.stringify(result)
+    }
+
+    console.log(options.endpoint, data)
+  } catch (error: any) {
+    console.error(error.name, error.message)
+    throw error
+  }
+
+  return NextResponse.json({
+    datetime,
+    filename,
+    data,
+  })
+}
