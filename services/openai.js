@@ -1,7 +1,7 @@
 import OpenAI from 'openai'
 import fs from 'fs'
 
-let openai: OpenAI | null = null
+let openai = null
 
 function getOpenAI() {
   if (!openai) {
@@ -40,12 +40,13 @@ export async function whisper({
   }
 
   try {
-    const response = mode === 'translations'
-      ? await openai.audio.translations.create(options)
-      : await openai.audio.transcriptions.create(options)
+    const response =
+      mode === 'translations'
+        ? await openai.audio.translations.create(options)
+        : await openai.audio.transcriptions.create(options)
 
     return response
-  } catch (error: any) {
+  } catch (error) {
     console.log(error.name, error.message)
     throw error
   }
