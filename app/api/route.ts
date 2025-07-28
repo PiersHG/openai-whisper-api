@@ -101,7 +101,7 @@ export async function POST(req: NextRequest) {
       throw new Error('OPENAI_API_KEY missing in environment')
     }
 
-    const result = await whisper({
+    const result: any = await whisper({
       mode: options.endpoint,
       file: fs.createReadStream(filepath),
       response_format: 'vtt',
@@ -131,4 +131,3 @@ export async function POST(req: NextRequest) {
     data,
   })
 }
-
