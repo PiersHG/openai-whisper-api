@@ -1,4 +1,5 @@
 import OpenAI from 'openai'
+import fs from 'fs'
 
 let openai: OpenAI | null = null
 
@@ -19,36 +20,33 @@ function getOpenAI() {
 }
 
 export async function whisper({
-    mode = 'transcriptions',
-    file,
-    model = 'whisper-1',
-    prompt = '',
-    response_format = 'json',
-    temperature = 0,
-    language = 'en',
+  mode = 'transcriptions',
+  file,
+  model = 'whisper-1',
+  prompt = '',
+  response_format = 'json',
+  temperature = 0,
+  language = 'en',
 }) {
+  const openai = getOpenAI()
 
-    const options = {
-        file,
-        model,
-        prompt,
-        response_format,
-        temperature,
-        language,
-    }
+  const options = {
+    file,
+    model,
+    prompt,
+    response_format,
+    temperature,
+    language,
+  }
 
-    try {
+  try {
+    const response = mode === 'translations'
+      ? await openai.audio.translations.create(options)
+      : await openai.audio.transcriptions.create(options)
 
-        const response = mode === 'translations' ? await openai.audio.translations.create(options) : await openai.audio.transcriptions.create(options)
-        
-        return response
-
-    } catch(error) {
-        
-        console.log(error.name, error.message)
-
-        throw error
-        
-    }
-
+    return response
+  } catch (error: any) {
+    console.log(error.name, error.message)
+    throw error
+  }
 }
