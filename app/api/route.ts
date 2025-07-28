@@ -5,6 +5,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import { cleanInput } from '../../lib/utils'
 import { whisper } from '../../services/openai'
 
+interface WhisperResult {
+  text?: string
+  data?: any
+  [key: string]: any
+}
+
 export async function POST(req: NextRequest) {
   const form = await req.formData()
 
@@ -97,7 +103,7 @@ export async function POST(req: NextRequest) {
   let data = ''
 
   try {
-    const result = await whisper({
+    const result: WhisperResult = await whisper({
       mode: options.endpoint,
       file: fs.createReadStream(filepath),
       response_format: 'vtt',
