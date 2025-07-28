@@ -41,7 +41,6 @@ const nextConfig = {
   trailingSlash: true,
   experimental: {
     appDir: true,
-    serverActions: true,
   },
   reactStrictMode: true,
 };
