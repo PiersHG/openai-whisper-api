@@ -16,8 +16,11 @@ const nextConfig = {
       use: 'raw-loader',
     });
 
-    // Add path alias for "@"
-    config.resolve.alias['@'] = path.resolve(__dirname);
+    // ✅ Add alias for "@" to support clean imports
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      '@': path.resolve(__dirname),
+    };
 
     return config;
   },
@@ -38,7 +41,9 @@ const nextConfig = {
   trailingSlash: true,
   experimental: {
     appDir: true,
+    serverActions: true, // Optional but common with `appDir`
   },
+  reactStrictMode: true, // Optional but recommended
 };
 
 module.exports = nextConfig;
