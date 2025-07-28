@@ -16,7 +16,7 @@ const nextConfig = {
       use: 'raw-loader',
     });
 
-    // ✅ Add alias for "@" to support clean imports
+    // This makes "@/lib/utils" and "@/services/openai" work
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
       '@': path.resolve(__dirname),
@@ -41,9 +41,9 @@ const nextConfig = {
   trailingSlash: true,
   experimental: {
     appDir: true,
-    serverActions: true, // Optional but common with `appDir`
+    serverActions: true,
   },
-  reactStrictMode: true, // Optional but recommended
+  reactStrictMode: true,
 };
 
 module.exports = nextConfig;
