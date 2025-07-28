@@ -5,12 +5,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { cleanInput } from '../../lib/utils'
 import { whisper } from '../../services/openai'
 
-interface WhisperResult {
-  text?: string
-  data?: any
-  [key: string]: any
-}
-
 export async function POST(req: NextRequest) {
   const form = await req.formData()
 
@@ -54,7 +48,7 @@ export async function POST(req: NextRequest) {
     return new NextResponse('Bad Request', { status: 400 })
   }
 
-  const flagDoNotUseApi = process.env?.DO_NOT_USE_API === 'true'
+  const flagDoNotUseApi = process?.env?.DO_NOT_USE_API === 'true'
 
   if (flagDoNotUseApi) {
     const outputDir = path.join('public', 'uploads')
@@ -103,7 +97,11 @@ export async function POST(req: NextRequest) {
   let data = ''
 
   try {
-    const result: WhisperResult = await whisper({
+    if (!process?.env?.OPENAI_API_KEY) {
+      throw new Error('OPENAI_API_KEY missing in environment')
+    }
+
+    const result = await whisper({
       mode: options.endpoint,
       file: fs.createReadStream(filepath),
       response_format: 'vtt',
@@ -124,7 +122,7 @@ export async function POST(req: NextRequest) {
     console.log(options.endpoint, data)
   } catch (error: any) {
     console.error(error.name, error.message)
-    throw error
+    return new NextResponse('Error during transcription', { status: 500 })
   }
 
   return NextResponse.json({
@@ -133,3 +131,4 @@ export async function POST(req: NextRequest) {
     data,
   })
 }
+
